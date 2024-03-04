@@ -9,12 +9,14 @@ class SanoSawada:
     dim_prob: int
     dim_recon: int
     num_neighbor: int
-    dt_prob: float
-    dt_jac: float
-    t_delay: float
+    dt: float
+    step_tau: int
+    step_td: int
+    model: Any = None
 
     def __post_init__(self):
-        pass
+        self.tau = self.dt * self.step_tau
+        self.td = self.dt * self.step_td
 
     def set_epsilon(self):
         pass
