@@ -20,14 +20,14 @@ class SanoSawada:
     def __post_init__(self):
         self.l_end = np.abs(np.min(self.td_idx)) # ts のうちヤコビ行列を評価に用いられる左端の添字
         if self.jac_len > (self.ts.shape[0]-self.step_jac-self.l_end+1)//self.step_jac:
-            raise ValueError(f"jac_len shoud be smaller")
+            raise ValueError("jac_len shoud be smaller")
         self.r_end = (self.jac_len-1)*self.step_jac + self.l_end
 
         acceptable_sampling_methods = ["sequential", "ascending", "random"]
         if self.sampling_neighbors not in acceptable_sampling_methods:
             raise ValueError(f"{self.sampling_neighbors} is not an acceptable value")
         
-        jl.seval("using LinearAlgebra") # julia の QR 分解を使えるようにしておく
+        de.seval("using LinearAlgebra") # julia の QR 分解を使えるようにしておく
         # Benettin-Shimada-Nagashima step
         self.bns = de.seval(""" 
         function bns(du,u,p,t)
@@ -76,7 +76,7 @@ class SanoSawada:
         for i in range(self.jac_len):
             J_transpose, _, rank, _ = np.linalg.lstsq(diffs_neighbors[i],diffs_neighbors_f[i],rcond=None)
             if rank != self.jac.shape[0]:
-                print("rank deficiency at idx {}".format(i))
+                print("Rank deficiency at idx {}".format(i))
             self.jac[:,:,i] = J_transpose.T
 
     def bns_steps(self):

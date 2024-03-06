@@ -2,7 +2,7 @@
 
 ## Estimating Lyapunov Spectra from Partially Observed Time-Series Using Delay Coordinates
 
-This repository contains an implementation of the Sano-Sawada algorithm for estimating Lyapunov spectra from partially observed time-series data using delay coordinates.
+An implementation of the Sano-Sawada algorithm for estimating Lyapunov spectra from partially observed time-series data using delay coordinates.
 
 ### Reference
 
