@@ -32,7 +32,7 @@ class SanoSawada:
         self.bns = de.seval(""" 
         function bns(du,u,p,t)
             N = size(p,1)
-            Q, R = qr(p[:,:,Int(t)] * reshape(u[1:N^2], N, N))
+            Q, R = qr(p[:,:,t] * reshape(u[1:N^2], N, N))
             du[1:N^2] = vec(Q)
             du[N^2+1:end] = log.(abs.(diag(R)))
         end""")
@@ -87,6 +87,8 @@ class SanoSawada:
         sol = de.solve(prob)
         self.R = np.stack([u_i[self.td_idx.shape[0]**2:] for u_i in sol.u[1:]]) # Rの対角成分の対数のみ保持．第一行は人工的なゼロが入っているので除外
 
-    def estimate_lyapunov_spectrum(self,length):
-        self.LS = np.mean(self.R[:length,:],axis=0)/self.step_jac/self.dt
+    def estimate_lyapunov_spectrum(self,transient=0,length=None):
+        if length is None:
+            length = self.jac_len
+        self.LS = np.mean(self.R[transient:length,:],axis=0)/self.step_jac/self.dt
         print("Estimated Lyapunov spectrum:", self.LS)
