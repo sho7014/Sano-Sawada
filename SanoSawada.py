@@ -89,6 +89,6 @@ class SanoSawada:
 
     def estimate_lyapunov_spectrum(self,transient=0,length=None):
         if length is None:
-            length = self.jac_len
-        self.LS = np.mean(self.R[transient:length,:],axis=0)/self.step_jac/self.dt
+            length = self.jac_len-transient
+        self.LS = np.mean(self.R[transient:length+transient,:],axis=0)/self.step_jac/self.dt
         print("Estimated Lyapunov spectrum:", self.LS)
